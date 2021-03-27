@@ -16,5 +16,34 @@
   
   
   
+  <entry>
+    <title>AbstractQueuedSynchronizer</title>
+    <link href="/blog/2021/03/27/AbstractQueuedSynchronizer/"/>
+    <url>/blog/2021/03/27/AbstractQueuedSynchronizer/</url>
+    
+    <content type="html"><![CDATA[<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pf">Provides a framework <span class="hljs-keyword">for</span> implementing blocking locks and related synchronizers (semaphores, events, etc) that rely <span class="hljs-keyword">on</span> first-in-first-out (FIFO) wait queues. This class is designed <span class="hljs-keyword">to</span> be a useful basis <span class="hljs-keyword">for</span> most kinds of synchronizers that rely <span class="hljs-keyword">on</span> a single atomic int value <span class="hljs-keyword">to</span> represent <span class="hljs-keyword">state</span>. Subclasses must define the protected methods that change this <span class="hljs-keyword">state</span>, and which define what that <span class="hljs-keyword">state</span> means <span class="hljs-keyword">in</span> terms of this object being acquired or released. Given these, the other methods <span class="hljs-keyword">in</span> this class carry <span class="hljs-keyword">out</span> <span class="hljs-literal">all</span> queuing and blocking mechanics. Subclasses can maintain other <span class="hljs-keyword">state</span> fields, but only the atomically updated int value manipulated using methods getState, <span class="hljs-built_in">set</span>State and compareAndSetState is tracked with respect <span class="hljs-keyword">to</span> synchronization.<br>Subclasses should be defined as non-public internal helper classes that are used <span class="hljs-keyword">to</span> implement the synchronization properties of their enclosing class. Class AbstractQueuedSynchronizer does not implement <span class="hljs-literal">any</span> synchronization interface. Instead it defines methods such as acquireInterruptibly that can be invoked as appropriate by concrete locks and related synchronizers <span class="hljs-keyword">to</span> implement their public methods.<br><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>JAVA</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>JAVA</tag>
+      
+      <tag>多线程</tag>
+      
+      <tag>同步</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
   
 </search>
