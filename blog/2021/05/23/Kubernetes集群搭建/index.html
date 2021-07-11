@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      17
+      20
        分钟
     </span>
   
@@ -315,15 +315,7 @@
 
 
 
-<h4 id="配置阿里云提供的Docker镜像加速地址"><a href="#配置阿里云提供的Docker镜像加速地址" class="headerlink" title="配置阿里云提供的Docker镜像加速地址"></a>配置阿里云提供的Docker镜像加速地址</h4><p>登录阿里云控制台，搜索 <code>容器镜像服务</code>，点击左侧 <code>镜像工具 -&gt; 镜像加速地址</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;&#123;    &quot;registry-mirrors&quot;: [&quot;https://xxx.mirror.aliyuncs.com&quot;]&#125;EOFsudo systemctl daemon-reloadsudo systemctl restart docker<br></code></pre></td></tr></table></figure>
-
-
-
-
-
-
-
+<h4 id="配置阿里云提供的Docker镜像加速地址"><a href="#配置阿里云提供的Docker镜像加速地址" class="headerlink" title="配置阿里云提供的Docker镜像加速地址"></a>配置阿里云提供的Docker镜像加速地址</h4><p>登录阿里云控制台，搜索 <code>容器镜像服务</code>，点击左侧 `镜像工具 -&gt; 镜像加速地址</p>
 <h3 id="安装Kubernetes"><a href="#安装Kubernetes" class="headerlink" title="安装Kubernetes"></a>安装Kubernetes</h3><h4 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h4><ul>
 <li><p>将Docker 的 Cgroup Driver 修改为 systemd，否则的话，在为后续使用kubeadm join命令的时候，会有warning，但是不影响使用</p>
 </li>
@@ -346,7 +338,7 @@
 
 
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shel">cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.listdeb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial mainEOF<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shel">cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.listdeb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main<br>EOF<br></code></pre></td></tr></table></figure>
 
 
 
@@ -367,7 +359,7 @@
 
 
 <p><strong>以上操作3太虚拟机均需要执行。</strong></p>
-<h4 id="初始化Master节点："><a href="#初始化Master节点：" class="headerlink" title="初始化Master节点："></a>初始化Master节点：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">kubeadm init \ --apiserver-advertise-address 192.168.12.203 \ --image-repository registry.aliyuncs.com/google_containers \ --kubernetes-version 1.20.7 \ --pod-network-cidr 10.10.0.0/16 \ --service-cidr 10.20.0.0/16 \ --upload-certs<br></code></pre></td></tr></table></figure>
+<h4 id="初始化Master节点："><a href="#初始化Master节点：" class="headerlink" title="初始化Master节点："></a>初始化Master节点：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">kubeadm init \<br>--apiserver-advertise-address 192.168.12.201 \<br>--image-repository registry.aliyuncs.com/google_containers \<br>--kubernetes-version 1.20.7 \<br>--pod-network-cidr 10.10.0.0/16 \<br>--service-cidr 10.20.0.0/16 \<br>--upload-certs<br></code></pre></td></tr></table></figure>
 
 <h4 id="flannel网络插件"><a href="#flannel网络插件" class="headerlink" title="flannel网络插件"></a>flannel网络插件</h4><p>注意：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">kubectl apply -f flannel.yml<br></code></pre></td></tr></table></figure>
@@ -383,14 +375,43 @@
 
 <h4 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">kubectl get nodes<br></code></pre></td></tr></table></figure>
 
-
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">kubectl describe pod -n kube-system  kube-flannel-ds-r8<br></code></pre></td></tr></table></figure>
-
+<h4 id="查看pod的描述"><a href="#查看pod的描述" class="headerlink" title="查看pod的描述"></a>查看pod的描述</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">kubectl describe pod -n kubesphere-system ks-installer-6f4c9fcfcf-92prt <br></code></pre></td></tr></table></figure>
 
 
 
+<h3 id="安装-nfs-server"><a href="#安装-nfs-server" class="headerlink" title="安装 nfs server"></a>安装 nfs server</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">sudo apt install nfs-kernel-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
 
+<ul>
+<li><p>可能出现问题：</p>
+<ul>
+<li><pre><code>vagrant@node-201:~$ sudo apt install nfs-kernel-server
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ nfs-kernel-server : Depends: libtirpc1 but it is not going to be installed
+                     Depends: nfs-common (= 1:1.2.8-6ubuntu1.2) but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.
+
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>  - 解决办法：把安装源修改成刚开始备份的安装源。<br><br>#### 配置nfs server<br><br>- /etc/exports<br><br></code></pre></td></tr></table></figure>
+/opt/data/nfs-server 192.168.12.100/24(rw,sync,no_subtree_check,no_root_squash)
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>#### 安装nfs 客户端<br><br></code></pre></td></tr></table></figure>
+sudo apt install nfs-common
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>### 创建StorageClass<br><br>#### 查看StorageClass<br><br></code></pre></td></tr></table></figure>
+kubectl get storageclass
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>#### 标记一个默认的StorageClass<br><br></code></pre></td></tr></table></figure>
+kubectl patch storageclass managed-nfs-storage -p &#39;&#123;&quot;metadata&quot;: &#123;&quot;annotations&quot;:&#123;&quot;storageclass.kubernetes.io/is-default-class&quot;:&quot;true&quot;&#125;&#125;&#125;&#39;
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="安装Kubesphere"><a href="#安装Kubesphere" class="headerlink" title="安装Kubesphere"></a>安装Kubesphere</h3>
             </div>
             <hr>
